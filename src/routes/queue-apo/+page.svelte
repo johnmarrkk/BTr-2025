@@ -33,16 +33,16 @@
     });
 </script>
 
-<div class="flex flex-col h-screen bg-white">
-    <div class="grid grid-cols-2 h-auto">
+<div class="flex flex-col h-screen bg-white justify-center">
+    <div class="grid grid-cols-2 h-full">
         <div class="border m-2 rounded-2xl flex items-center bg-black">
             <!-- svelte-ignore a11y_media_has_caption -->
             <video width="100%" height="auto" autoplay muted loop controls>
-                <source src="/Made to Be More in Senior High.mp4" type="video/mp4">
+                <source src="/11_FinLit _v7_.mp4_en.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
-        <div class="flex-10 bg-white p-4 m-2 rounded-3xl drop-shadow-lg">
+        <div class="flex-10 bg-white p-4 m-2 rounded-3xl drop-shadow-lg items-center">
             <div
                 class="grid grid-cols-3 place-content-stretch gap-4 items-center h-full"
             >
@@ -61,7 +61,7 @@
                         class="bg-blue-800 text-white h-32 w-full flex flex-col justify-center items-center rounded-b-2xl"
                     >
                         <h1 class="text-3xl font-bold">WINDOW 1</h1>
-                        <h1 class="">Treasury Operating Officer III</h1>
+                        <h1 class="">Treasury Operations Officer</h1>
                     </div>
                 </div>
 
@@ -80,7 +80,7 @@
                         class="bg-blue-800 text-white h-32 w-full flex flex-col justify-center items-center rounded-b-2xl"
                     >
                         <h1 class="text-3xl font-bold">WINDOW 2</h1>
-                        <h1 class="">Treasury Operating Officer I</h1>
+                        <h1 class="">Cheif Treasury Operations Officer</h1>
                     </div>
                 </div>
 
@@ -99,7 +99,7 @@
                         class="bg-blue-800 text-white h-32 w-full flex flex-col justify-center items-center rounded-b-2xl"
                     >
                         <h1 class="text-3xl font-bold">WINDOW 3</h1>
-                        <h1 class="">Treasury Operating Officer IV</h1>
+                        <h1 class="">Treasury Operations Officer</h1>
                     </div>
                 </div>
 
@@ -118,7 +118,7 @@
                         class="bg-blue-800 text-white h-32 w-full flex flex-col justify-center items-center rounded-b-2xl"
                     >
                         <h1 class="text-3xl font-bold">WINDOW 4</h1>
-                        <h1 class="">Treasury Operating Officer IV</h1>
+                        <h1 class="">Treasury Operations Officer</h1>
                     </div>
                 </div>
 
@@ -137,7 +137,7 @@
                         class="bg-blue-800 text-white h-32 w-full flex flex-col justify-center items-center rounded-b-2xl"
                     >
                         <h1 class="text-3xl font-bold">WINDOW 5</h1>
-                        <h1 class="">Treasury Operating Officer IV</h1>
+                        <h1 class="">Treasury Operations Officer</h1>
                     </div>
                 </div>
 
@@ -156,14 +156,14 @@
                         class="bg-blue-800 text-white h-32 w-full flex flex-col justify-center items-center rounded-b-2xl"
                     >
                         <h1 class="text-3xl font-bold">WINDOW 6</h1>
-                        <h1 class="">Treasury Operating Officer IV</h1>
+                        <h1 class="">Provincial Head</h1>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="flex items-center bg-blue-800 p-4 m-2 rounded-3xl h-40">
+    <div class="flex items-center bg-blue-800 p-4 m-2 rounded-3xl h-64">
         <div>
             <img
                 class="h-32"
@@ -177,7 +177,7 @@
             </h1>
         </div>
 
-        <div class="ml-auto w-80 text-white">
+        <div class="ml-auto w-90 text-white text-5xl">
             <p class="text-lg font-semibold">Philippine Standard Time</p>
             <p class="text-5xl font-bold">{time}</p>
             <p class="text-2xl">{date}</p>
