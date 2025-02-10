@@ -1,4 +1,5 @@
 <script>
+    export let data;
     import Modal from "./apo-services.svelte";
     let showModal = false;
 </script>
@@ -35,5 +36,15 @@
 
     {#if showModal}
         <Modal on:close={() => (showModal = false)} />
+    {/if}
+
+    {#if data}
+        <ul>
+            {#each data as item}
+                <li>{item.name}</li>
+            {/each}
+        </ul>
+    {:else}
+        <p>Loading...</p>
     {/if}
 </div>
