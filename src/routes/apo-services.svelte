@@ -1,6 +1,5 @@
 <script>
     import { createEventDispatcher } from "svelte";
-
     import Modal from "./queue-number.svelte";
     let modalVisible = false;
     let queueNumber = 0;
@@ -58,7 +57,8 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-    class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50"
+    class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50 
+           backdrop-blur-sm bg-transparent bg-opacity-50"
     on:click={handleClickOutside}
 >
     <div
@@ -98,12 +98,14 @@
     </div>
 </div>
 
+
 {#if isModalOpen}
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div>
         <div
-            class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50"
+            class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50 
+           backdrop-blur-sm bg-transparent bg-opacity-50"
         >
             <div class="bg-white bg-opacity-90 rounded-lg shadow-lg p-8 w-auto">
                 <h2 class="text-2xl font-bold mb-4">
@@ -147,7 +149,8 @@
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div>
         <div
-            class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50"
+            class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50 
+           backdrop-blur-sm bg-transparent bg-opacity-50"
         >
             <div class="bg-white bg-opacity-90 rounded-lg shadow-lg p-8 w-auto">
                 <div class="flex">
