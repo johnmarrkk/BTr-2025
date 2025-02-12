@@ -1,7 +1,40 @@
 <script>
+    import { onMount } from "svelte";
+    import { supabase } from "../lib/supabase/client";
+
+    let instruments = [];
     export let data;
     import Modal from "./apo-services.svelte";
     let showModal = false;
+
+    async function fetchInstruments() {
+        const { data } = await supabase.from("instruments").select("*");
+        instruments = data || [];
+    }
+
+    onMount(() => {
+        fetchInstruments();
+
+        // Realtime subscription
+        const subscription = supabase
+            .channel("instruments")
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "instruments" },
+                (payload) => {
+                    instruments = [...instruments, payload.new]; // Update list in real-time
+                },
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(subscription);
+        };
+    });
+
+    async function addInstrument() {
+        await supabase.from("instruments").insert([{ name: "New Instrument" }]);
+    }
 </script>
 
 <nav class="h-24 p-2 w-full bg-blue-800 flex items-center">
@@ -47,4 +80,12 @@
     {:else}
         <p>Loading...</p>
     {/if}
+
+    <div>
+        <ul>
+            {#each instruments as instrument}
+              <li>{instrument.name}</li>
+            {/each}
+          </ul>
+    </div>
 </div>

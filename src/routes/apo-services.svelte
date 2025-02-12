@@ -1,8 +1,15 @@
 <script>
     import { createEventDispatcher } from "svelte";
     import Modal from "./queue-number.svelte";
+
+    import { onMount } from "svelte";
+    import { supabase } from "$lib/supabase/client";
+
     let modalVisible = false;
     let queueNumber = 0;
+
+    let latestQueueNumber = "01"; // Default to 01
+    let newQueueNumber = "";
 
     let windowNum = 0;
 
@@ -51,13 +58,55 @@
     function closePriorityModal() {
         isPriorityOpen = false;
     }
+
+    // Fetch the latest queue number
+    async function fetchLatestQueue() {
+        const { data, error } = await supabase
+            .from("numberqueue")
+            .select("number")
+            .order("id", { ascending: false }) // Get the latest entry
+            .limit(1)
+            .single();
+
+        if (error) {
+            console.error("Error fetching latest queue:", error);
+        } else if (data) {
+            latestQueueNumber = data.number;
+        }
+    }
+
+    // Generate the next queue number
+    function getNextQueueNumber() {
+        let nextNumber = String(parseInt(latestQueueNumber) + 1).padStart(
+            2,
+            "0",
+        ); // Ensure 2 digits
+        newQueueNumber = nextNumber;
+    }
+
+    // Insert the next queue number
+    async function addQueue1() {
+        getNextQueueNumber(); // Calculate the next number
+
+        const { error } = await supabase
+            .from("numberqueue")
+            .insert([{ number: newQueueNumber }]);
+
+        if (error) {
+            console.error("Error adding queue:", error);
+        } else {
+            latestQueueNumber = newQueueNumber; // Update UI
+        }
+    }
+
+    onMount(fetchLatestQueue);
 </script>
 
 <!-- Clickable background wrapper -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-    class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50 
+    class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50
            backdrop-blur-sm bg-transparent bg-opacity-50"
     on:click={handleClickOutside}
 >
@@ -76,35 +125,46 @@
             <button
                 type="button"
                 class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-100 h-40 cursor-pointer"
-                on:click={() => { openPriorityModal(); changeWindowNum(2); }}
+                on:click={() => {
+                    openPriorityModal();
+                    changeWindowNum(2);
+                }}
                 >Confirmation and Certification of National Collections</button
             >
             <button
                 type="button"
                 class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-100 h-40 cursor-pointer"
-                on:click={() => { openPriorityModal(); changeWindowNum(2); }}>Opening of Bank Account</button
+                on:click={() => {
+                    openPriorityModal();
+                    changeWindowNum(2);
+                }}>Opening of Bank Account</button
             >
             <button
                 type="button"
                 class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-100 h-40 cursor-pointer"
-                on:click={() => { openPriorityModal(); changeWindowNum(6); }}>Re-order of MDS Check</button
+                on:click={() => {
+                    openPriorityModal();
+                    changeWindowNum(6);
+                }}>Re-order of MDS Check</button
             >
             <button
                 type="button"
                 class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-100 h-40 cursor-pointer"
-                on:click={() => { openPriorityModal(); changeWindowNum(6); }}>General Concerns</button
+                on:click={() => {
+                    openPriorityModal();
+                    changeWindowNum(6);
+                }}>General Concerns</button
             >
         </div>
     </div>
 </div>
-
 
 {#if isModalOpen}
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div>
         <div
-            class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50 
+            class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50
            backdrop-blur-sm bg-transparent bg-opacity-50"
         >
             <div class="bg-white bg-opacity-90 rounded-lg shadow-lg p-8 w-auto">
@@ -115,22 +175,34 @@
                     <button
                         type="button"
                         class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-40 h-24 cursor-pointer"
-                        on:click={() => { openPriorityModal(); changeWindowNum(1); }}>LGU</button
+                        on:click={() => {
+                            openPriorityModal();
+                            changeWindowNum(1);
+                        }}>LGU</button
                     >
                     <button
                         type="button"
                         class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-40 h-24 cursor-pointer"
-                        on:click={() => { openPriorityModal(); changeWindowNum(3); }}>NGA</button
+                        on:click={() => {
+                            openPriorityModal();
+                            changeWindowNum(3);
+                        }}>NGA</button
                     >
                     <button
                         type="button"
                         class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-40 h-24 cursor-pointer"
-                        on:click={() => { openPriorityModal(); changeWindowNum(4); }}>SK</button
+                        on:click={() => {
+                            openPriorityModal();
+                            changeWindowNum(4);
+                        }}>SK</button
                     >
                     <button
                         type="button"
                         class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-40 h-24 cursor-pointer"
-                        on:click={() => { openPriorityModal(); changeWindowNum(5); }}>GOCC</button
+                        on:click={() => {
+                            openPriorityModal();
+                            changeWindowNum(5);
+                        }}>GOCC</button
                     >
                 </div>
                 <button
@@ -149,7 +221,7 @@
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div>
         <div
-            class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50 
+            class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50
            backdrop-blur-sm bg-transparent bg-opacity-50"
         >
             <div class="bg-white bg-opacity-90 rounded-lg shadow-lg p-8 w-auto">
@@ -181,4 +253,4 @@
     </div>
 {/if}
 
-<Modal bind:isVisible={modalVisible} {queueNumber} {windowNum}/>
+<Modal bind:isVisible={modalVisible} {queueNumber} {windowNum} />
