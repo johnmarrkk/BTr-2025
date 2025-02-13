@@ -1,7 +1,4 @@
-
 <script>
-    import { adminStore } from "$lib/stores/admin";
-
     import {
         Alert,
         Button,
@@ -30,37 +27,35 @@
 
     // Handle login
     async function handleLogin() {
-    errorMessage.set(""); // Reset error message
+        errorMessage.set(""); // Reset error message
 
-    // Fetch the admin by employee_id
-    const { data: admin, error } = await supabase
-        .from("admins")
-        .select("employee_id, employee_name, password_hash, role, window_name")
-        .eq("employee_id", employee_id)
-        .single();
+        // Fetch the admin by employee_id
+        const { data: admin, error } = await supabase
+            .from("admins")
+            .select("employee_id, password_hash, role, window_name")
+            .eq("employee_id", employee_id)
+            .single();
 
-    if (error || !admin) {
-        errorMessage.set("Invalid Employee ID.");
-        return;
+        // If no admin or error, display message
+        if (error || !admin) {
+            errorMessage.set("Invalid Employee ID.");
+            return;
+        }
+
+        // Compare the hashed password from Supabase with the entered password
+        const isMatch = await bcrypt.compare(password, admin.password_hash);
+
+        if (!isMatch) {
+            errorMessage.set("Invalid Password.");
+            return;
+        }
+
+        // Successful login, save session in localStorage or use stores
+        localStorage.setItem("admin_session", JSON.stringify(admin));
+
+        // Redirect to the dashboard or another page
+        window.location.href = "/admin"; // Replace with your desired page
     }
-
-    // Compare hashed password with input password
-    const isMatch = await bcrypt.compare(password, admin.password_hash);
-
-    if (!isMatch) {
-        errorMessage.set("Invalid Password.");
-        return;
-    }
-
-    // Store admin session in localStorage
-    localStorage.setItem("admin_session", JSON.stringify(admin));
-    
-    // Update the Svelte store
-    adminStore.set(admin);
-
-    // Redirect to the admin dashboard
-    window.location.href = "/admin";
-}
 </script>
 
 <div class="flex justify-center items-center mt-60 ">
@@ -106,12 +101,12 @@
                     size="md"
                 >
                     <button
-                    type="button"
                         slot="right"
                         on:click={() => (show = !show)}
+                        class="pointer-events-auto"
                     >
                         {#if show}
-                            <EyeOutline class="w-6 h-6" />  
+                            <EyeOutline class="w-6 h-6" />
                         {:else}
                             <EyeSlashOutline class="w-6 h-6" />
                         {/if}
