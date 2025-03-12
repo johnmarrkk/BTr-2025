@@ -6,7 +6,7 @@
     let queueNumber = "";
     let prio = false;
     let service = "";
-
+    
     let showModal = writable(false);
     let fidelityModal = writable(false);
     let queueModal = writable(false);
