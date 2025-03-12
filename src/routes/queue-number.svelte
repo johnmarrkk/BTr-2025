@@ -27,7 +27,7 @@
                 <p
                     class="text-9xl border font-bold text-blue-600 mt-2 p-4 border-black border-dashed rounded-2xl"
                 >
-                    {String(queueNumber).padStart(2, "0")}
+                    {String(queueNumber).padStart(3, "0")}
                 </p>
             </div>
 

@@ -1,21 +1,61 @@
 <script>
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
     import Modal from "./queue-number.svelte";
-
-    import { onMount } from "svelte";
     import { supabase } from "$lib/supabase/client";
 
     let modalVisible = false;
     let queueNumber = 0;
-
-    let latestQueueNumber = "01"; // Default to 01
+    let service = "";
+    let isPriority = false;
+    let latestQueueNumber = "001"; // Default
     let newQueueNumber = "";
-
     let windowNum = 0;
 
-    function addQueue() {
-        queueNumber++; // Increment the queue number each time the modal is triggered
+    const dispatch = createEventDispatcher();
+
+    // Fetch latest queue number from Supabase
+    async function fetchLatestQueue() {
+        const { data, error } = await supabase
+            .from("queue")
+            .select("queue_number")
+            .order("queue_id", { ascending: false })
+            .limit(1)
+            .single();
+
+        if (error) {
+            console.error("Error fetching latest queue:", error);
+        } else if (data) {
+            latestQueueNumber = data.queue_number;
+        }
+    }
+
+    // Reactive statement: Compute new queue number
+    $: newQueueNumber = String(parseInt(latestQueueNumber) + 1).padStart(3, "0");
+
+    // Insert new queue into Supabase
+    async function addQueue() {
+        await fetchLatestQueue(); // Ensure the latest queue number is up to date
+
+        queueNumber++;
         modalVisible = true;
+
+        const { error } = await supabase
+            .from("queue")
+            .insert([
+                {
+                    queue_number: newQueueNumber,
+                    service: service, 
+                    is_priority: isPriority, 
+                    status: "waiting", // Default status
+                    created_at: new Date().toISOString()
+                }
+            ]);
+
+        if (error) {
+            console.error("Error adding queue:", error);
+        } else {
+            latestQueueNumber = newQueueNumber; // Update after successful insertion
+        }
     }
 
     function changeWindowNum(newNum) {
@@ -24,90 +64,50 @@
         }
     }
 
-    const dispatch = createEventDispatcher();
-
-    // Close modal when clicking outside the modal box
     function handleClickOutside(event) {
-        if (event.target.closest("#apo-modal") === null) {
-            dispatch("close");
-        }
-    }
-
-    function ClickOutsideFidelityModal(event) {
-        if (event.target.closest("#fidelity-modal") === null) {
+        if (!event.target.closest("#apo-modal")) {
             dispatch("close");
         }
     }
 
     let isModalOpen = false;
-
     function openFidelityModal() {
         isModalOpen = true;
     }
-
     function closeFidelityModal() {
         isModalOpen = false;
     }
 
     let isPriorityOpen = false;
-
     function openPriorityModal() {
         isPriorityOpen = true;
     }
-
     function closePriorityModal() {
         isPriorityOpen = false;
     }
 
-    // Fetch the latest queue number
-    async function fetchLatestQueue() {
-        const { data, error } = await supabase
-            .from("numberqueue")
-            .select("number")
-            .order("id", { ascending: false }) // Get the latest entry
-            .limit(1)
-            .single();
-
-        if (error) {
-            console.error("Error fetching latest queue:", error);
-        } else if (data) {
-            latestQueueNumber = data.number;
-        }
-    }
-
-    // Generate the next queue number
-    function getNextQueueNumber() {
-        let nextNumber = String(parseInt(latestQueueNumber) + 1).padStart(
-            2,
-            "0",
-        ); // Ensure 2 digits
-        newQueueNumber = nextNumber;
-    }
-
-    // Insert the next queue number
-    async function addQueue1() {
-        getNextQueueNumber(); // Calculate the next number
-
-        const { error } = await supabase
-            .from("numberqueue")
-            .insert([{ number: newQueueNumber }]);
-
-        if (error) {
-            console.error("Error adding queue:", error);
-        } else {
-            latestQueueNumber = newQueueNumber; // Update UI
-        }
-    }
-
     onMount(fetchLatestQueue);
+
+    function setServiceValue(button) {
+        service = button.getAttribute("data-service"); // Get the value from button's attribute
+        alert("Selected Service: " + service);
+    }
+
+    function setPrioValue() {
+        isPriority = true;
+        alert("Priority: " + isPriority);
+    }
+
+    function setPrioValuetoFalse() {
+        isPriority = false;
+        alert("Priority: " + isPriority);
+    }
 </script>
 
-<!-- Clickable background wrapper -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-    class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50
-           backdrop-blur-sm bg-transparent bg-opacity-50"
+    class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50 backdrop-blur-sm bg-transparent bg-opacity-50"
     on:click={handleClickOutside}
 >
     <div
@@ -119,136 +119,151 @@
             <button
                 type="button"
                 on:click={openFidelityModal}
-                class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-100 h-40 cursor-pointer"
-                >Fidelity Bond</button
+                class="text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 w-100 h-40 cursor-pointer"
             >
+                Fidelity Bond
+            </button>
             <button
                 type="button"
-                class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-100 h-40 cursor-pointer"
                 on:click={() => {
                     openPriorityModal();
                     changeWindowNum(2);
                 }}
-                >Confirmation and Certification of National Collections</button
+                class="text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 w-100 h-40 cursor-pointer"
             >
+                Confirmation and Certification of National Collections
+            </button>
             <button
                 type="button"
-                class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-100 h-40 cursor-pointer"
                 on:click={() => {
                     openPriorityModal();
                     changeWindowNum(2);
-                }}>Opening of Bank Account</button
+                }}
+                class="text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 w-100 h-40 cursor-pointer"
             >
+                Opening of Bank Account
+            </button>
             <button
                 type="button"
-                class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-100 h-40 cursor-pointer"
                 on:click={() => {
                     openPriorityModal();
                     changeWindowNum(6);
-                }}>Re-order of MDS Check</button
+                }}
+                class="text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 w-100 h-40 cursor-pointer"
             >
+                Re-order of MDS Check
+            </button>
             <button
                 type="button"
-                class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-100 h-40 cursor-pointer"
                 on:click={() => {
                     openPriorityModal();
                     changeWindowNum(6);
-                }}>General Concerns</button
+                }}
+                class="text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 w-100 h-40 cursor-pointer"
             >
+                General Concerns
+            </button>
         </div>
     </div>
 </div>
 
 {#if isModalOpen}
-    <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <div>
-        <div
-            class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50
-           backdrop-blur-sm bg-transparent bg-opacity-50"
-        >
-            <div class="bg-white bg-opacity-90 rounded-lg shadow-lg p-8 w-auto">
-                <h2 class="text-2xl font-bold mb-4">
-                    Fidelity Bond Information
-                </h2>
-                <div class="flex">
-                    <button
-                        type="button"
-                        class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-40 h-24 cursor-pointer"
-                        on:click={() => {
-                            openPriorityModal();
-                            changeWindowNum(1);
-                        }}>LGU</button
-                    >
-                    <button
-                        type="button"
-                        class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-40 h-24 cursor-pointer"
-                        on:click={() => {
-                            openPriorityModal();
-                            changeWindowNum(3);
-                        }}>NGA</button
-                    >
-                    <button
-                        type="button"
-                        class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-40 h-24 cursor-pointer"
-                        on:click={() => {
-                            openPriorityModal();
-                            changeWindowNum(4);
-                        }}>SK</button
-                    >
-                    <button
-                        type="button"
-                        class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 w-40 h-24 cursor-pointer"
-                        on:click={() => {
-                            openPriorityModal();
-                            changeWindowNum(5);
-                        }}>GOCC</button
-                    >
-                </div>
+    <div
+        class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50 backdrop-blur-sm bg-transparent bg-opacity-50"
+    >
+        <div class="bg-white bg-opacity-90 rounded-lg shadow-lg p-8 w-auto">
+            <h2 class="text-2xl font-bold mb-4">Fidelity Bond Information</h2>
+            <div class="flex">
                 <button
-                    on:click={closeFidelityModal}
-                    class="mt-4 text-white bg-red-600 hover:bg-red-700 font-bold rounded-lg py-2 px-4"
+                    type="button"
+                    on:click={(event) => {
+                        openPriorityModal();
+                        changeWindowNum(1);
+                        setServiceValue(event.target); // Pass the clicked button to the function
+                    }}
+                    class="serviceButton text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 w-40 h-24 cursor-pointer"
+                    data-service="Fidelity Bond (LGU)"
                 >
-                    Close
+                    LGU
+                </button>
+                <button
+                    type="button"
+                    on:click={() => {
+                        openPriorityModal();
+                        changeWindowNum(3);
+                        setServiceValue(event.target);
+                    }}
+                    class="text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 w-40 h-24 cursor-pointer"
+                    data-service="Fidelity Bond (NGA)"
+                >
+                    NGA
+                </button>
+                <button
+                    type="button"
+                    on:click={() => {
+                        openPriorityModal();
+                        changeWindowNum(4);
+                    }}
+                    class="text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 w-40 h-24 cursor-pointer"
+                >
+                    SK
+                </button>
+                <button
+                    type="button"
+                    on:click={() => {
+                        openPriorityModal();
+                        changeWindowNum(5);
+                    }}
+                    class="text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 w-40 h-24 cursor-pointer"
+                >
+                    GOCC
                 </button>
             </div>
+            <button
+                on:click={closeFidelityModal}
+                class="mt-4 text-white bg-red-600 hover:bg-red-700 font-bold rounded-lg py-2 px-4"
+            >
+                Close
+            </button>
         </div>
     </div>
 {/if}
 
 {#if isPriorityOpen}
-    <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <div>
-        <div
-            class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50
-           backdrop-blur-sm bg-transparent bg-opacity-50"
-        >
-            <div class="bg-white bg-opacity-90 rounded-lg shadow-lg p-8 w-auto">
-                <div class="flex">
-                    <button
-                        type="button"
-                        class="text-white bg-red-500 hover:bg-red-600 hover:border transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 size-70 cursor-pointer"
-                        on:click={addQueue}
-                    >
-                        <img
-                            src="https://ph-test-11.slatic.net/p/493d128b900a54ae49002aa2fb44f8ae.jpg"
-                            alt="prio"
-                        /></button
-                    >
-                    <button
-                        type="button"
-                        class="text-white bg-blue-600 hover:bg-blue-700 transition-transform duration-200 transform hover:shadow-lg font-bold rounded-lg text-3xl px-5 py-2.5 text-center me-2 mb-2 size-70 cursor-pointer"
-                        on:click={addQueue}>No</button
-                    >
-                </div>
+    <div
+        class="absolute top-0 left-0 w-full h-screen flex items-center justify-center z-50 backdrop-blur-sm bg-transparent bg-opacity-50"
+    >
+        <div class="bg-white bg-opacity-90 rounded-lg shadow-lg p-8 w-auto">
+            <div class="flex">
                 <button
-                    on:click={closePriorityModal}
-                    class="mt-4 text-white bg-red-600 hover:bg-red-700 font-bold rounded-lg py-2 px-4"
+                    type="button"
+                    class="text-white bg-red-500 hover:bg-red-600 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 size-70 cursor-pointer"
+                    on:click={(event) => {
+                        addQueue(); 
+                        setPrioValue();  
+                      }}
                 >
-                    Close
+                    <img
+                        src="https://ph-test-11.slatic.net/p/493d128b900a54ae49002aa2fb44f8ae.jpg"
+                        alt="prio"
+                    />
                 </button>
+                <button
+                    type="button"
+                    class="text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 size-70 cursor-pointer"
+                    on:click={(event) => {
+                        addQueue(); 
+                        setPrioValuetoFalse();  
+                      }}
+                      >No</button
+                >
             </div>
+            <button
+                on:click={closePriorityModal}
+                class="mt-4 text-white bg-red-600 hover:bg-red-700 font-bold rounded-lg py-2 px-4"
+            >
+                Close
+            </button>
         </div>
     </div>
 {/if}

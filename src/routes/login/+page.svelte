@@ -84,7 +84,7 @@
             <Label class="space-y-2 !text-black mb-2">
                 <span>Employee ID</span>
                 <Input
-                    class="!bg-white !text-black w-100"
+                    class="!bg-white !text-black w-full"
                     type="text"
                     id="employee_id"
                     bind:value={employee_id}
