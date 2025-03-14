@@ -20,7 +20,7 @@
     import { fly } from "svelte/transition";
     let show = false;
     let show1 = false;
-    import { supabase } from "$lib/supabase/client";
+    import { supabase } from "$lib/supabaseClient";
     import { writable } from "svelte/store";
     import bcrypt from "bcryptjs"; // Import bcrypt
 

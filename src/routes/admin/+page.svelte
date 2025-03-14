@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { supabase } from "$lib/supabase/client";
+  import { supabase } from "$lib/supabaseClient.js";
   import { adminStore, loadAdminSession } from "$lib/stores/admin";
   import {ArrowLeftToBracketOutline, ProfileCardOutline} from 'flowbite-svelte-icons';
 

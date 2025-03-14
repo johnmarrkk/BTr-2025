@@ -2,19 +2,19 @@
     import { writable } from "svelte/store";
     import { scale } from "svelte/transition";
     import { supabase } from "$lib/supabaseClient";
-
-    let queueNumber = "";
-    let prio = false;
-    let service = "";
     
+    let queueNumber;
+    let prio = writable(false);
+    let service = writable('');
     let showModal = writable(false);
     let fidelityModal = writable(false);
     let queueModal = writable(false);
     let priorityModal = writable(false);
 
+
     function updateDateTime() {
         const now = new Date();
-        const date = now.toLocaleDateString("en-US", {
+        const date = now.toLocaleDateString("en-PH", {
             year: "numeric",
             month: "long",
             day: "numeric",
@@ -56,7 +56,7 @@
                 is_priority: prio, // Set priority status
                 status: "pending", // Set status
                 service: service, // Set service type
-                created_at: new Date().toISOString(), // Use current timestamp
+                created_at: new Date(new Date().getTime() + 8 * 60 * 60 * 1000).toISOString(), // Use current timestamp
             },
         ]);
 
@@ -122,7 +122,7 @@
                     type="button"
                     class="text-white bg-blue-700 hover:bg-blue-800 w-64 h-20 font-medium rounded-lg text-m p-2 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
-                    on:click={() => fidelityModal.set(false)}
+                    on:click={() => showModal.set(false)}
                     on:click={() => setService("CCNC")}
                     >Confirmation and Certification of National Collections</button
                 >
@@ -130,7 +130,7 @@
                     type="button"
                     class="text-white bg-blue-700 hover:bg-blue-800 w-64 h-20 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
-                    on:click={() => fidelityModal.set(false)}
+                    on:click={() => showModal.set(false)}
                     on:click={() => setService("Bank_Account")}>Opening of Bank Account</button
                 >
                 <button
@@ -145,7 +145,7 @@
                     type="button"
                     class="text-white bg-blue-700 hover:bg-blue-800 w-64 h-20 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
-                    on:click={() => fidelityModal.set(false)}
+                    on:click={() => showModal.set(false)}
                     on:click={() => setService("Gen_Concern")}>General Concerns</button
                 >
             </div>
