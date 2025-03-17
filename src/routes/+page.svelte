@@ -2,15 +2,25 @@
     import { writable } from "svelte/store";
     import { scale } from "svelte/transition";
     import { supabase } from "$lib/supabaseClient";
-    
-    let queueNumber;
+    import { onMount } from "svelte";
+
+    let queueNumber = 0;
     let prio = writable(false);
-    let service = writable('');
+    let service = writable("");
     let showModal = writable(false);
     let fidelityModal = writable(false);
     let queueModal = writable(false);
     let priorityModal = writable(false);
 
+    let loading = true;
+
+    onMount(() => {
+        loading = true;
+        setTimeout(() => {
+            queueNumber = ""; // Replace with your actual queue logic
+            loading = false;
+        }, 2000); // 2 seconds delay
+    });
 
     function updateDateTime() {
         const now = new Date();
@@ -56,7 +66,9 @@
                 is_priority: prio, // Set priority status
                 status: "pending", // Set status
                 service: service, // Set service type
-                created_at: new Date(new Date().getTime() + 8 * 60 * 60 * 1000).toISOString(), // Use current timestamp
+                created_at: new Date(
+                    new Date().getTime() + 8 * 60 * 60 * 1000,
+                ).toISOString(), // Use current timestamp
             },
         ]);
 
@@ -70,29 +82,37 @@
     }
 </script>
 
-<nav class="bg-blue-600 w-full h-16 text-xl flex items-center text-white">
-    <img
-        class="h-12 m-2"
-        src="https://www.treasury.gov.ph/wp-content/uploads/2016/08/cropped-BTr-Original-Logo-1-1.png"
-        alt=""
-    />
-    BTR Queuing System
-</nav>
+<div style="width: 100%; z-index: -1; background-image: url('/BTr-bg.png'); background-size: cover;" class="h-screen">
 
-<div class="flex justify-center gap-4 items-center mt-80">
+
+<nav class="w-full text-2xl flex flex-col items-center justify-center pt-44">
+    <div class="flex items-center">
+        <img
+            class="h-28 m-2"
+            src="https://www.treasury.gov.ph/wp-content/uploads/2016/08/cropped-BTr-Original-Logo-1-1.png"
+            alt=""
+        />
+        <h1 class="font-bold text-7xl text-white">BTr</h1>
+    </div>
+
+    <h1 class="font-bold ml-4 text-4xl text-white">QUEUING SYSTEM</h1>
+</nav>
+<div class="flex justify-center gap-6 items-center mt-25 ">
     <button
         on:click={() => showModal.set(true)}
-        class="px-4 py-2 w-80 h-40 text-white text-2xl font-bold bg-blue-600 rounded-md cursor-pointer transition-transform transform hover:scale-105"
+        class="px-4 py-2 w-80 h-72 text-white text-2xl font-bold bg-blue-600 rounded-xl cursor-pointer transition-transform transform hover:scale-105"
     >
         ALBAY PROVINCIAL OFFICE
     </button>
     <button
-        class="px-4 py-2 w-80 h-40 text-white text-2xl font-bold bg-yellow-400 rounded-md cursor-pointer transition-transform transform hover:scale-105"
+        class="px-4 py-2 w-80 h-72 text-white text-2xl font-bold bg-yellow-400 rounded-xl cursor-pointer transition-transform transform hover:scale-105"
     >
         REGIONAL OFFICE
     </button>
 
     <div></div>
+</div>
+
 </div>
 <!-- Open Modal Button -->
 
@@ -111,16 +131,16 @@
             on:click|stopPropagation
         >
             <h2 class="text-xl font-bold">Albay Provincial Office</h2>
-            <div class="grid grid-cols-3 p-4 items-center">
+            <div class="grid grid-cols-3 p-2 items-center">
                 <button
                     type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 w-64 h-20 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
+                    class="text-white bg-blue-700 hover:bg-blue-800 w-80 h-40 font-bold rounded-lg text-2xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => fidelityModal.set(true)}
                     on:click={() => showModal.set(false)}>Fidelity Bond</button
                 >
                 <button
                     type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 w-64 h-20 font-medium rounded-lg text-m p-2 me-2 mb-2 focus:outline-none cursor-pointer"
+                    class="text-white bg-blue-700 hover:bg-blue-800 w-80 h-40 font-bold rounded-lg text-2xl p-2 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => showModal.set(false)}
                     on:click={() => setService("CCNC")}
@@ -128,14 +148,15 @@
                 >
                 <button
                     type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 w-64 h-20 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
+                    class="text-white bg-blue-700 hover:bg-blue-800 w-80 h-40 font-bold rounded-lg text-2xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => showModal.set(false)}
-                    on:click={() => setService("Bank_Account")}>Opening of Bank Account</button
+                    on:click={() => setService("Bank_Account")}
+                    >Opening of Bank Account</button
                 >
                 <button
                     type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 w-64 h-20 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
+                    class="text-white bg-blue-700 hover:bg-blue-800 w-80 h-40 font-bold rounded-lg text-2xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => fidelityModal.set(false)}
                     on:click={() => setService("MDS_check")}
@@ -143,10 +164,11 @@
                 >
                 <button
                     type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 w-64 h-20 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
+                    class="text-white bg-blue-700 hover:bg-blue-800 w-80 h-40 font-bold rounded-lg text-2xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => showModal.set(false)}
-                    on:click={() => setService("Gen_Concern")}>General Concerns</button
+                    on:click={() => setService("Gen_Concern")}
+                    >General Concerns</button
                 >
             </div>
         </div>
@@ -168,35 +190,34 @@
             on:click|stopPropagation
         >
             <h2 class="text-xl font-bold">Fidelity Bond</h2>
-            <div class="flex p-4 items-center">
+            <div class="flex p-2 items-center">
                 <button
                     type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 w-40 h-20 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
+                    class="text-white bg-blue-700 hover:bg-blue-800 w-48 h-40 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => fidelityModal.set(false)}
                     on:click={() => setService("Fedelity_LGU")}>LGU</button
                 >
                 <button
                     type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 w-40 h-20 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
+                    class="text-white bg-blue-700 hover:bg-blue-800 w-48 h-40 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => fidelityModal.set(false)}
                     on:click={() => setService("Fedelity_NGA")}>NGA</button
                 >
                 <button
                     type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 w-40 h-20 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
+                    class="text-white bg-blue-700 hover:bg-blue-800 w-48 h-40 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => fidelityModal.set(false)}
                     on:click={() => setService("Fedelity_SK")}>SK</button
                 >
                 <button
                     type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 w-40 h-20 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
+                    class="text-white bg-blue-700 hover:bg-blue-800 w-48 h-40 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => fidelityModal.set(false)}
-                    on:click={() => setService("Fedelity_GOCC")}
-                    >GOCC</button
+                    on:click={() => setService("Fedelity_GOCC")}>GOCC</button
                 >
             </div>
         </div>
@@ -217,10 +238,10 @@
             transition:scale={{ duration: 200 }}
             on:click|stopPropagation
         >
-            <div class="flex p-4 items-center">
+            <div class="flex items-center">
                 <button
                     type="button"
-                    class="text-white bg-red-600 hover:bg-red-700 w-50 h-40 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
+                    class="text-white bg-red-600 hover:bg-red-700 w-80 h-60 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => queueModal.set(true)}
                     on:click={() => priorityModal.set(false)}
                     on:click={updateDateTime}
@@ -234,7 +255,7 @@
                 >
                 <button
                     type="button"
-                    class="text-white bg-blue-700 hover:bg-blue-800 w-50 h-40 font-medium rounded-lg text-lg px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
+                    class="text-white bg-blue-700 hover:bg-blue-800 w-80 h-60 font-medium rounded-lg text-7xl px-2.5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => queueModal.set(true)}
                     on:click={() => priorityModal.set(false)}
                     on:click={updateDateTime}
@@ -271,9 +292,17 @@
             <div
                 class="flex justify-center p-4 h-80 m-5 rounded-lg border text-9xl font-bold border-dashed items-center"
             >
-                <h1>{queueNumber}</h1>
+                {#if loading}
+                    <!-- Tailwind Loading Spinner -->
+                    <div
+                        class="w-12 h-12 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"
+                    ></div>
+                {:else}
+                    <!-- Queue Number Display -->
+                    <h1 class="text-9xl font-bold">{queueNumber}</h1>
+                {/if}
             </div>
-            <div id="dateTimeDisplay" class="text-xs ml-5 font-semibold"></div>
+            <div id="dateTimeDisplay" class="text-m ml-5 font-semibold"></div>
             <div
                 class="flex justify-center m-5 rounded-lg items-center bg-blue-500"
             >
@@ -287,3 +316,5 @@
         </div>
     </div>
 {/if}
+
+
