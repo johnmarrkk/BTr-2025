@@ -82,37 +82,39 @@
     }
 </script>
 
-<div style="width: 100%; z-index: -1; background-image: url('/BTr-bg.png'); background-size: cover;" class="h-screen">
+<div
+    style="width: 100%; z-index: -1; background-image: url('/BTr-bg.png'); background-size: cover;"
+    class="h-screen"
+>
+    <nav
+        class="w-full text-2xl flex flex-col items-center justify-center pt-44"
+    >
+        <div class="flex items-center">
+            <img
+                class="h-28 m-2"
+                src="https://www.treasury.gov.ph/wp-content/uploads/2016/08/cropped-BTr-Original-Logo-1-1.png"
+                alt=""
+            />
+            <h1 class="font-bold text-7xl text-white">BTr</h1>
+        </div>
 
+        <h1 class="font-bold ml-4 text-4xl text-white">QUEUING SYSTEM</h1>
+    </nav>
+    <div class="flex justify-center gap-6 items-center mt-25">
+        <button
+            on:click={() => showModal.set(true)}
+            class="px-4 py-2 w-80 h-72 text-white text-2xl font-bold bg-blue-600 rounded-xl cursor-pointer transition-transform transform hover:scale-105"
+        >
+            ALBAY PROVINCIAL OFFICE
+        </button>
+        <button
+            class="px-4 py-2 w-80 h-72 text-white text-2xl font-bold bg-yellow-400 rounded-xl cursor-pointer transition-transform transform hover:scale-105"
+        >
+            REGIONAL OFFICE
+        </button>
 
-<nav class="w-full text-2xl flex flex-col items-center justify-center pt-44">
-    <div class="flex items-center">
-        <img
-            class="h-28 m-2"
-            src="https://www.treasury.gov.ph/wp-content/uploads/2016/08/cropped-BTr-Original-Logo-1-1.png"
-            alt=""
-        />
-        <h1 class="font-bold text-7xl text-white">BTr</h1>
+        <div></div>
     </div>
-
-    <h1 class="font-bold ml-4 text-4xl text-white">QUEUING SYSTEM</h1>
-</nav>
-<div class="flex justify-center gap-6 items-center mt-25 ">
-    <button
-        on:click={() => showModal.set(true)}
-        class="px-4 py-2 w-80 h-72 text-white text-2xl font-bold bg-blue-600 rounded-xl cursor-pointer transition-transform transform hover:scale-105"
-    >
-        ALBAY PROVINCIAL OFFICE
-    </button>
-    <button
-        class="px-4 py-2 w-80 h-72 text-white text-2xl font-bold bg-yellow-400 rounded-xl cursor-pointer transition-transform transform hover:scale-105"
-    >
-        REGIONAL OFFICE
-    </button>
-
-    <div></div>
-</div>
-
 </div>
 <!-- Open Modal Button -->
 
@@ -143,7 +145,7 @@
                     class="text-white bg-blue-700 hover:bg-blue-800 w-80 h-40 font-bold rounded-lg text-2xl p-2 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => showModal.set(false)}
-                    on:click={() => setService("CCNC")}
+                    on:click={() => setService("Confirmation and Certification of National Collections")}
                     >Confirmation and Certification of National Collections</button
                 >
                 <button
@@ -151,15 +153,15 @@
                     class="text-white bg-blue-700 hover:bg-blue-800 w-80 h-40 font-bold rounded-lg text-2xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => showModal.set(false)}
-                    on:click={() => setService("Bank_Account")}
+                    on:click={() => setService("Bank Account")}
                     >Opening of Bank Account</button
                 >
                 <button
                     type="button"
                     class="text-white bg-blue-700 hover:bg-blue-800 w-80 h-40 font-bold rounded-lg text-2xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
-                    on:click={() => fidelityModal.set(false)}
-                    on:click={() => setService("MDS_check")}
+                    on:click={() => showModal.set(false)}
+                    on:click={() => setService("MDS Check")}
                     >Re-order of MDS Check</button
                 >
                 <button
@@ -167,7 +169,7 @@
                     class="text-white bg-blue-700 hover:bg-blue-800 w-80 h-40 font-bold rounded-lg text-2xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => showModal.set(false)}
-                    on:click={() => setService("Gen_Concern")}
+                    on:click={() => setService("General Concern")}
                     >General Concerns</button
                 >
             </div>
@@ -196,28 +198,28 @@
                     class="text-white bg-blue-700 hover:bg-blue-800 w-48 h-40 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => fidelityModal.set(false)}
-                    on:click={() => setService("Fedelity_LGU")}>LGU</button
+                    on:click={() => setService("Fidelity LGU")}>LGU</button
                 >
                 <button
                     type="button"
                     class="text-white bg-blue-700 hover:bg-blue-800 w-48 h-40 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => fidelityModal.set(false)}
-                    on:click={() => setService("Fedelity_NGA")}>NGA</button
+                    on:click={() => setService("Fidelity NGA")}>NGA</button
                 >
                 <button
                     type="button"
                     class="text-white bg-blue-700 hover:bg-blue-800 w-48 h-40 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => fidelityModal.set(false)}
-                    on:click={() => setService("Fedelity_SK")}>SK</button
+                    on:click={() => setService("Fidelity SK")}>SK</button
                 >
                 <button
                     type="button"
                     class="text-white bg-blue-700 hover:bg-blue-800 w-48 h-40 font-bold rounded-lg text-3xl px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer"
                     on:click={() => priorityModal.set(true)}
                     on:click={() => fidelityModal.set(false)}
-                    on:click={() => setService("Fedelity_GOCC")}>GOCC</button
+                    on:click={() => setService("Fidelity GOCC")}>GOCC</button
                 >
             </div>
         </div>
@@ -279,7 +281,7 @@
     >
         <!-- Modal Box -->
         <div
-            class="bg-white p-6 rounded-lg shadow-lg w-150 h-140 border border-gray-300"
+            class="bg-white p-6 rounded-lg shadow-lg w-150 h-auto border border-gray-300"
             transition:scale={{ duration: 200 }}
             on:click|stopPropagation
         >
@@ -288,6 +290,11 @@
             </div>
             <div class="flex justify-center">
                 <h2 class="text-xl font-bold">Queue Number</h2>
+            </div>
+            <div class="flex justify-center">
+                {#if prio}
+                 <h1 class="text-red-500 text-6xl font-bold">PRIORITY</h1>
+                {/if}
             </div>
             <div
                 class="flex justify-center p-4 h-80 m-5 rounded-lg border text-9xl font-bold border-dashed items-center"
@@ -301,6 +308,9 @@
                     <!-- Queue Number Display -->
                     <h1 class="text-9xl font-bold">{queueNumber}</h1>
                 {/if}
+            </div>
+            <div>
+                <h1 class="flex justify-center font-bold text-2xl">{service}</h1>
             </div>
             <div id="dateTimeDisplay" class="text-m ml-5 font-semibold"></div>
             <div
@@ -316,5 +326,3 @@
         </div>
     </div>
 {/if}
-
-
