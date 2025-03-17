@@ -137,7 +137,7 @@
                         class="bg-blue-800 text-white h-32 w-full flex flex-col justify-center items-center rounded-b-2xl"
                     >
                         <h1 class="text-3xl font-bold">WINDOW 5</h1>
-                        <h1 class="">Treasury Operations Officer</h1>
+                        <h1 class=""></h1>
                     </div>
                 </div>
 
@@ -156,14 +156,14 @@
                         class="bg-blue-800 text-white h-32 w-full flex flex-col justify-center items-center rounded-b-2xl"
                     >
                         <h1 class="text-3xl font-bold">WINDOW 6</h1>
-                        <h1 class="">Provincial Head</h1>
+                        <h1 class=""></h1>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="flex items-center bg-blue-800 p-4 m-2 rounded-3xl h-64">
+    <div class="flex items-center bg-blue-800 p-4 m-2 rounded-3xl h-45">
         <div>
             <img
                 class="h-32"
@@ -183,4 +183,27 @@
             <p class="text-2xl">{date}</p>
         </div>
     </div>
+    <div class="bg-black">
+         <div class="overflow-hidden whitespace-nowrap h-20">
+        <h1 class="text-white text-5xl inline-block pl-[100%] animate-marquee">
+            Gutom na ba kayo? gusto niyo bang kumain!???
+        </h1>
+    </div>
+    </div>
+   
 </div>
+
+<style>
+    @keyframes marquee {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(-100%, 0);
+      }
+    }
+  
+    .animate-marquee {
+      animation: marquee 20s linear infinite;
+    }
+  </style>

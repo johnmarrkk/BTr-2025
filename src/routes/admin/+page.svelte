@@ -214,6 +214,7 @@
         {#if adminData}
           <h1 class="text-3xl font-bold uppercase">{adminData.window_name}</h1>
           <h1 class="">{adminData.role}</h1>
+          <h1 class="">{adminData.service}</h1>
         {/if} 
       </div>
        

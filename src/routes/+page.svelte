@@ -281,7 +281,7 @@
     >
         <!-- Modal Box -->
         <div
-            class="bg-white p-6 rounded-lg shadow-lg w-150 h-auto border border-gray-300"
+            class="bg-white p-6 rounded-lg shadow-lg w-150 h-auto border border-gray-300 print:border-0 print:shadow-none"
             transition:scale={{ duration: 200 }}
             on:click|stopPropagation
         >
@@ -306,11 +306,11 @@
                     ></div>
                 {:else}
                     <!-- Queue Number Display -->
-                    <h1 class="text-9xl font-bold">{queueNumber}</h1>
+                    <h1 class="text-9xl font-bold font-sans">{queueNumber}</h1>
                 {/if}
             </div>
-            <div>
-                <h1 class="flex justify-center font-bold text-2xl">{service}</h1>
+            <div class="flex justify-center">
+                <h1 class="flex justify-center items-center font-bold text-2xl mr-5 ml-5 text-center">{service}</h1>
             </div>
             <div id="dateTimeDisplay" class="text-m ml-5 font-semibold"></div>
             <div
@@ -318,7 +318,7 @@
             >
                 <button
                     on:click={() => queueModal.set(false)}
-                    class="px-4 py-2 bg-blue-400 w-full text-white rounded-md"
+                    class="px-4 py-2 bg-blue-400 w-full text-white rounded-md print:hidden"
                 >
                     Done
                 </button>
