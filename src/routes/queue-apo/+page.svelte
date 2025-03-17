@@ -33,7 +33,7 @@
     });
 </script>
 
-<div class="flex flex-col h-full bg-white justify-center">
+<div class="flex flex-col h-screen bg-white justify-center">
     <div class="grid grid-cols-2 h-full">
         <div class="border m-2 rounded-2xl flex items-center bg-black">
             <!-- svelte-ignore a11y_media_has_caption -->
