@@ -33,7 +33,7 @@
     });
 </script>
 
-<div class="flex flex-col h-screen bg-white justify-center">
+<div class="flex flex-col h-full bg-white justify-center">
     <div class="grid grid-cols-2 h-full">
         <div class="border m-2 rounded-2xl flex items-center bg-black">
             <!-- svelte-ignore a11y_media_has_caption -->
@@ -163,7 +163,7 @@
         </div>
     </div>
 
-    <div class="flex items-center bg-blue-800 p-4 m-2 rounded-3xl h-45">
+    <div class="flex items-center bg-blue-800 p-4 m-2 rounded-3xl h-38">
         <div>
             <img
                 class="h-32"
@@ -186,7 +186,7 @@
     <div class="bg-black">
          <div class="overflow-hidden whitespace-nowrap h-20">
         <h1 class="text-white text-5xl inline-block pl-[100%] animate-marquee">
-            Gutom na ba kayo? gusto niyo bang kumain!???
+            This is for the advisory or information to be display
         </h1>
     </div>
     </div>
