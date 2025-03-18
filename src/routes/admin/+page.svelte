@@ -2,38 +2,41 @@
   import { onMount } from "svelte";
   import { supabase } from "$lib/supabaseClient.js";
   import { adminStore, loadAdminSession } from "$lib/stores/admin";
-  import {ArrowLeftToBracketOutline, ProfileCardOutline} from 'flowbite-svelte-icons';
+  import {
+    ArrowLeftToBracketOutline,
+    ProfileCardOutline,
+  } from "flowbite-svelte-icons";
 
   let time = "";
-    let date = "";
+  let date = "";
 
-    function updateDateTime() {
-        const now = new Date();
+  function updateDateTime() {
+    const now = new Date();
 
-        // Get time in 12-hour format with AM/PM
-        time = now.toLocaleTimeString("en-PH", {
-            timeZone: "Asia/Manila",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: true,
-        });
-
-        // Get full date (e.g., Monday, February 3, 2025)
-        date = now.toLocaleDateString("en-PH", {
-            timeZone: "Asia/Manila",
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-        });
-    }
-
-    onMount(() => {
-        updateDateTime();
-        const interval = setInterval(updateDateTime, 1000);
-        return () => clearInterval(interval); // Cleanup on unmount
+    // Get time in 12-hour format with AM/PM
+    time = now.toLocaleTimeString("en-PH", {
+      timeZone: "Asia/Manila",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
     });
+
+    // Get full date (e.g., Monday, February 3, 2025)
+    date = now.toLocaleDateString("en-PH", {
+      timeZone: "Asia/Manila",
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
+
+  onMount(() => {
+    updateDateTime();
+    const interval = setInterval(updateDateTime, 1000);
+    return () => clearInterval(interval); // Cleanup on unmount
+  });
 
   let adminData;
 
@@ -49,8 +52,6 @@
     numberqueue = data || [];
   }
 
-  
-
   import {
     Table,
     TableBody,
@@ -60,15 +61,13 @@
     TableHeadCell,
   } from "flowbite-svelte";
 
-
-  
   onMount(() => {
-        loadAdminSession(); // Load admin session on page reload
-    });
+    loadAdminSession(); // Load admin session on page reload
+  });
 
-    $: if ($adminStore) {
-        adminData = $adminStore;
-    }
+  $: if ($adminStore) {
+    adminData = $adminStore;
+  }
 
   function logout() {
     localStorage.clear();
@@ -85,17 +84,18 @@
     alt="logo"
   />
   <h1 class="text-white text-3xl">BTr Queuing System APO</h1>
-  <div class="ml-auto flex">
+  <div class="ml-auto flex items-center">
     <div class="ml-auto w-auto text-white text-xl">
-    <p class="text-sm font-semibold">Philippine Standard Time</p>
-    <p class="text-xl font-bold">{time}</p>
-    <p class="text-sm">{date}</p>
-</div>
-  <button on:click={logout} class="flex ml-auto mr-2 my-4 text-white items-center hover:bg-gray-600 p-2 rounded-lg">Logout
-    <ArrowLeftToBracketOutline/>
-  </button>
+      <p class="text-sm">{date}</p>
+      <p class="text-xl font-bold">{time}</p>
+    </div>
+    <button
+      on:click={logout}
+      class="flex ml-auto mr-2 my-4 text-white items-center hover:bg-gray-600 p-2 rounded-lg"
+      >
+      <ArrowLeftToBracketOutline />
+    </button>
   </div>
-  
 </nav>
 <div
   class="flex flex-col-2 justify-center items-center h-auto gap-4 w-full m-5"
@@ -143,7 +143,6 @@
                 >W1</TableBodyCell
               >
             </TableBodyRow>
-           
           </TableBody>
         </Table>
       </div>
@@ -152,9 +151,10 @@
         <Table shadow class="!bg-white !text-black ">
           <TableHead class="!bg-white text-gray-700">
             {#if adminData}
-            <TableHeadCell class="!bg-green-500 !text-white text-center text-sm"
-              >{adminData.window_name}</TableHeadCell
-            >
+              <TableHeadCell
+                class="!bg-green-500 !text-white text-center text-sm"
+                >{adminData.window_name}</TableHeadCell
+              >
             {/if}
           </TableHead>
           <TableBody class="!bg-white divide-y max-h-60 overflow-y-auto">
@@ -188,16 +188,20 @@
   <div
     class="grid grid-rows-[400px, 200px] h-[500px] w-1/4 rounded-2xl mb-auto"
   >
-  <div class="w-full h-auto">
-    <div class="p-3 m-2 rounded-2xl border">
-      {#if adminData}
-          <p class="text-2xl mt-2  flex items-center   "><ProfileCardOutline class="m-1"/><strong>{adminData.employee_name}</strong></p>
+    <div class="w-full h-auto">
+      <div class="p-3 m-2 rounded-2xl border">
+        {#if adminData}
+          <p class="text-2xl mt-2 flex items-center">
+            <ProfileCardOutline class="m-1" /><strong
+              >{adminData.employee_name}</strong
+            >
+          </p>
           <p class="text-lg"><strong>{adminData.role}</strong></p>
-          <p class="text-lg"><strong>{adminData.window_name}</strong></p>
-      {/if}
+          <p class="text-lg"><strong>{adminData.window_name} </strong></p>
+          <p class="text-lg"><strong>{adminData.service}</strong></p>
+        {/if}
+      </div>
     </div>
-    
-  </div>
     <div class="w-full">
       <div
         class="flex flex-col bg-white rounded-3xl items-center h-100 border w-full"
@@ -211,13 +215,14 @@
         <div
           class="bg-blue-800 text-white h-32 w-full flex flex-col justify-center items-center rounded-b-2xl"
         >
-        {#if adminData}
-          <h1 class="text-3xl font-bold uppercase">{adminData.window_name}</h1>
-          <h1 class="">{adminData.role}</h1>
-          <h1 class="">{adminData.service}</h1>
-        {/if} 
-      </div>
-       
+          {#if adminData}
+            <h1 class="text-3xl font-bold uppercase">
+              {adminData.window_name}
+            </h1>
+            <h1 class="">{adminData.role}</h1>
+            <h1 class="">{adminData.service}???s</h1>
+          {/if}
+        </div>
       </div>
     </div>
     <div class="h-auto mt-5">
@@ -244,7 +249,3 @@
     </div>
   </div>
 </div>
-
-
-
-

@@ -56,8 +56,8 @@
 
         // Determine the next queue number
         const nextQueueNumber = latestQueue
-            ? String(Number(latestQueue.queue_number) + 1).padStart(2, "0")
-            : "01";
+            ? String(Number(latestQueue.queue_number) + 1).padStart(3, "0")
+            : "001";
 
         // Insert the new queue number into the database
         const { error } = await supabase.from("queue").insert([

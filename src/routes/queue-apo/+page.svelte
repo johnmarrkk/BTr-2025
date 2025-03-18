@@ -137,7 +137,7 @@
                         class="bg-blue-800 text-white h-32 w-full flex flex-col justify-center items-center rounded-b-2xl"
                     >
                         <h1 class="text-3xl font-bold">WINDOW 5</h1>
-                        <h1 class=""></h1>
+                        <h1 class="">...</h1>
                     </div>
                 </div>
 
@@ -156,7 +156,7 @@
                         class="bg-blue-800 text-white h-32 w-full flex flex-col justify-center items-center rounded-b-2xl"
                     >
                         <h1 class="text-3xl font-bold">WINDOW 6</h1>
-                        <h1 class=""></h1>
+                        <h1 class="">...</h1>
                     </div>
                 </div>
             </div>
