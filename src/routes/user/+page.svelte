@@ -1,11 +1,13 @@
 
 
 <script>
+    import { fontFamily } from "tailwindcss/defaultTheme";
+
 </script>
 
 <nav class="w-full h-16 p-2 bg-blue-700 top-0 fixed left-0 z-50 flex items-center px-4 shadow-md">
-    <img class="h-12" src="https://www.treasury.gov.ph/wp-content/uploads/2016/08/BTr-Original-Logo-e1472045709118.png" alt="logo"/>
     <img class="h-12 ml-2" src="https://www.bagongpilipinastayo.com/static/bpsf/logo.png" alt="logo"/>
+    <img class="h-12" src="https://www.treasury.gov.ph/wp-content/uploads/2016/08/BTr-Original-Logo-e1472045709118.png" alt="logo"/>
     <h1 class="text-white text-2xl ml-4">BTr Queuing System APO</h1>
 </nav>
 <div class="w-full h-screen flex items-center justify-center">
